@@ -20,6 +20,7 @@ H100s are Tier-1 capital assets. Today we experience **Compute Drift**:
 ---
 
 ## 2) Expected Economic Impact (Directional)
+
 | Metric | Current | Target (Post-Policy) |
 |---|---:|---:|
 | Useful H100 utilization | __% | __% |
@@ -28,6 +29,7 @@ H100s are Tier-1 capital assets. Today we experience **Compute Drift**:
 | Estimated monthly leakage | $__ | $__ |
 
 Model + assumptions: **[Economics](economics.md)**
+
 
 ---
 
