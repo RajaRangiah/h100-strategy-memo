@@ -1,41 +1,83 @@
+# Metrics (Scoreboard)
+
+Home | Economics | Governance | Implementation | Metrics
+
+This page defines the **operational scoreboard** for the H100 strategy: capacity, cost, latency, reliability, and quality.  
+If you can’t measure it weekly, you can’t manage it.
 
 ---
 
-## `docs/metrics.md`
+## 1) North Star Metrics
 
-```md
-# Metrics: Measuring Drift, Utilization, and ROI
-
-## Executive KPIs
-
-- **Useful H100 utilization (%)**: time spent on approved AI workloads
-- **Compute drift (%)**: time H100 capacity is consumed by unauthorized workloads
-- **Misroute rate (%)**: AI workloads running on A100/CPU when H100 available
-- **Effective $/useful GPU-hour**
-- **Cost per inference (sampled)**
+| Metric | Definition | Target |
+|---|---|---|
+| **GPU Utilization (SM%)** | Avg Streaming Multiprocessor utilization across H100 fleet | __% |
+| **MFU (Model FLOPs Utilization)** | Achieved FLOPs / theoretical FLOPs for the model+hardware | __% |
+| **P95 End-to-End Latency** | Prompt-in → last token out | __ ms |
+| **Cost per 1M Output Tokens** | Fully loaded cost / output tokens (by tier) | $__ |
+| **SLO Compliance** | % requests meeting latency + error budgets | __% |
 
 ---
 
-## Operational metrics (for Infra + FinOps)
+## 2) Capacity & Fleet Health
 
-- **Top offenders (namespaces / deployments / users)** consuming H100 without authorization
-- **Queue pressure**: pending GPU pods vs available H100 capacity
-- **Time-to-schedule (P50/P95)** for approved workloads
-- **Exception inventory**: who has exceptions, expiry dates, and actual usage
-- **Utilization split**: training vs inference vs “other”
+### 2.1 GPU Availability
+
+| Metric | Definition | Target |
+|---|---|---|
+| **GPU Ready Rate** | % GPUs healthy + schedulable | __% |
+| **Node Ready Rate** | % nodes healthy + schedulable | __% |
+| **Drain/Repair MTTR** | Mean time to repair failed nodes | __ hrs |
+
+### 2.2 Scheduler Signal
+
+| Metric | Definition | Target |
+|---|---|---|
+| **Pending Pods (H100 queue)** | Count of pods pending due to GPU constraints | __ |
+| **Time-to-Schedule P95** | P95 time from create → scheduled | __ sec |
+| **Preemption Events** | Count/day, by namespace | __ |
 
 ---
 
-## Reporting cadence
+## 3) Performance (Serving)
 
-- **Weekly**: Infra + FinOps internal review
-- **Monthly**: executive summary (trend + offenders + savings estimate)
+### 3.1 Latency
+
+| Metric | Definition | Target |
+|---|---|---|
+| **TTFT P50 / P95** | Time to first token | __ / __ ms |
+| **TPOT P50 / P95** | Time per output token | __ / __ ms |
+| **E2E P50 / P95** | End-to-end request latency | __ / __ ms |
+
+### 3.2 Throughput
+
+| Metric | Definition | Target |
+|---|---|---|
+| **Tokens/sec/GPU** | Output tokens per second per GPU | __ |
+| **Req/sec/GPU** | Requests per second per GPU (by endpoint) | __ |
+| **Batch Size (effective)** | Actual batch size after dynamic batching | __ |
 
 ---
 
-## Outputs (what the report must contain)
+## 4) GPU Efficiency (Compute + Memory)
 
-- KPI trend lines (last 4–8 weeks)
-- Drift breakdown by offender (top 10)
-- “Savings estimate” vs baseline month
-- Action list: enforcement gaps, expiring exceptions, and planned remediations
+### 4.1 Utilization
+
+| Metric | Definition | Target |
+|---|---|---|
+| **SM Utilization** | GPU compute utilization | __% |
+| **HBM Bandwidth Utilization** | Memory bandwidth used / peak | __% |
+| **Power Utilization** | Avg GPU power draw / TDP | __% |
+
+### 4.2 Memory
+
+| Metric | Definition | Target |
+|---|---|---|
+| **HBM Used (P95)** | P95 HBM used per GPU | __ GB |
+| **KV Cache Hit Rate** | Cache hits / total lookups | __% |
+| **KV Evictions** | Evictions/sec (or per req) | __ |
+
+### 4.3 MFU Definition (use consistently)
+
+```text
+MFU = achieved_FLOPs_per_second / theoretical_peak_FLOPs_per_second
