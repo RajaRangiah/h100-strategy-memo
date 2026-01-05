@@ -1,25 +1,23 @@
 # Magnet + Authorization: Affinity + Toleration (Golden Spec)
 
-This page is the **only** authoritative source for Kubernetes scheduling controls targeting **H100-class nodes**.  
-Everything here is copy/paste safe.
+This page is the authoritative source for Kubernetes scheduling controls targeting H100-class nodes.
 
 ---
 
-## 1) Required node labeling and tainting (bash)
+## 1) Required node labeling (bash)
+Run this once per node to identify it as H100 hardware.
 
 ```bash
 NODE="h100-node-01"
-
-# Label the node to advertise GPU family
 kubectl label nodes "$NODE" nvidia.com/gpu.family=h100 --overwrite
-
-# Taint the node to repel non-authorized workloads
-kubectl taint nodes "$NODE" hardware=h100:NoSchedule --overwrite
 ```
 
-## 2) Workload deployment (Kubernetes YAML)
-
-
+## 2) Shield: taint H100 nodes (bash)
+```bash
+NODE="h100-node-01"
+kubectl taint nodes "$NODE" hardware=h100:NoSchedule --overwrite
+```
+## 3) Magnet + Authorization (Kubernetes YAML)
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
