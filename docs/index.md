@@ -1,4 +1,3 @@
-```markdown
 # Infrastructure Strategy: H100 Fleet Optimization (H1 2026)
 
 To: Executive Leadership Team  
@@ -26,7 +25,7 @@ Business impact: compute drift silently raises inference COGS, degrades performa
 | Effective $/useful GPU-hour | $__ | $__ |
 | Estimated monthly leakage | $__ | $__ |
 
-Model and assumptions: [Compute Unit Economics](economics.html)
+Model and assumptions: [Compute Unit Economics](economics.md)
 
 ---
 
@@ -36,7 +35,7 @@ We will enforce a mandatory dual-layer scheduling policy:
 - **Shield**: Unauthorized workloads are blocked from H100 nodes (hard enforcement)
 - **Magnet**: Approved AI workloads are explicitly placed on H100 hardware
 
-Engineering specification: [Implementation](implementation.html)
+Engineering specification: [Implementation](implementation.md)
 
 ---
 
@@ -46,7 +45,7 @@ Engineering specification: [Implementation](implementation.html)
 - Enforcement occurs at scheduling time (no best-effort placement)
 - Exceptions require Infra + FinOps approval, with scope and expiry
 
-Governance details: [Governance Model](governance.html)
+Governance details: [Governance Model](governance.md)
 
 ---
 
@@ -58,7 +57,7 @@ Effectiveness will be tracked via:
 - Mis-routing of AI workloads
 - Effective $/useful GPU-hour
 
-Reporting cadence and KPIs: [Metrics](metrics.html)
+Reporting cadence and KPIs: [Metrics](metrics.md)
 
 ---
 
@@ -67,4 +66,3 @@ Reporting cadence and KPIs: [Metrics](metrics.html)
 Approve:
 1. Mandatory enforcement of the H100 scheduling policy across clusters
 2. Monthly executive reporting on utilization, drift, and compute ROI
-```
