@@ -2,6 +2,8 @@
 
 ---
 
+This implementation exists to enforce the economic constraints defined in the Economics section — not to maximize raw utilization.
+
 # Implementation Specification: Shield & Magnet
 
 To stop compute drift, we move from "Best Effort" scheduling to "Enforced" scheduling using Kubernetes primitives.

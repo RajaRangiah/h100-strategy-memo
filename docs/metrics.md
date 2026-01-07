@@ -2,6 +2,10 @@
 
 ---
 
+These metrics directly back the economic recovery modeled in docs/economics.md.
+Each KPI exists to prevent a specific dollar-denominated failure mode.
+
+
 # Metrics & KPIs
 
 We are moving away from "Allocated Memory" as a success metric.
