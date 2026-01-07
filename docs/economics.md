@@ -1,33 +1,26 @@
-[Home](index.md) | [Economics](economics.md) | [Governance](governance.md) | [Implementation](implementation.md) | [Metrics](metrics.md)
+[🏠 Return to Strategy Memo](index.md)
 
 ---
 
-# Compute Unit Economics (H100)
+# Compute Unit Economics
 
-## Core definitions
-- **All-in $/GPU-hour:** amortized capex + power + networking + ops, divided by GPU-hours
-- **Useful utilization:** % of H100 time running approved AI workloads
-- **Compute drift:** % of H100 time consumed by unauthorized workloads OR AI misrouted to non-H100
+## The Cost of "Drift"
+When a generic workload runs on an H100, we are not just wasting capacity; we are paying a premium for performance we don't use.
 
-## Inputs (fill these)
-- H100 count: __
-- All-in $/GPU-hour: $__  
-- Current drift %: __%
-- Target drift %: __%
-- Current useful utilization %: __%
-- Target useful utilization %: __%
+### Tier-1 vs. Tier-2 Cost Structure
+* **H100 Node Cost:** ~$XX/hour (approx. market rate)
+* **Standard CPU Node Cost:** ~$X/hour
+* **Price Premium:** ~10x-20x
 
-## Leakage model (directional)
-Monthly leakage ≈ `H100_count * 24 * 30 * ($/GPU-hour) * Drift%`
+### The "Silent Leak" Calculation
+If 30% of a 100-GPU fleet is running CPU-bound tasks (data prep, idle notebooks):
+* **Daily Waste:** 30 GPUs * 24 hours * $Cost_Diff
+* **Annual Waste:** > $10M+ depending on reserved instance pricing.
 
-Monthly savings ≈ `Leakage_current - Leakage_target`
+## Target Unit Economics
+By enforcing the "Shield + Magnet" policy, we aim to shift:
+1.  **Cost per Training Flop:** Decrease by ensuring H100s never idle.
+2.  **Effective Utilization:** Shift from "Allocated" (vanity) to "Tensor Core Active" (reality).
 
-## Example placeholder (replace with your real numbers)
-If:
-- 128 H100s
-- $4 / GPU-hour (all-in)
-- Drift reduces 18% → 5%
-
-Leakage_current = 128 * 720 * 4 * 0.18 ≈ **$66,355 / month**  
-Leakage_target  = 128 * 720 * 4 * 0.05 ≈ **$18,432 / month**  
-**Savings ≈ $47,923 / month**
+---
+[🏠 Return to Strategy Memo](index.md)

@@ -1,53 +1,46 @@
-# Magnet + Authorization: Affinity + Toleration (Golden Spec)
-
-This page is the authoritative source for Kubernetes scheduling controls targeting H100-class nodes.
+[🏠 Return to Strategy Memo](index.md)
 
 ---
 
-## 1) Required node labeling (bash)
-Run this once per node to identify it as H100 hardware.
+# Implementation Specification: Shield & Magnet
 
+To stop compute drift, we move from "Best Effort" scheduling to "Enforced" scheduling using Kubernetes primitives.
+
+## 1. The Shield (Taints)
+We apply a "NoSchedule" taint to all H100 nodes. This repels any pod that does not explicitly ask for these expensive resources.
+
+**Command:**
 ```bash
-NODE="h100-node-01"
-kubectl label nodes "$NODE" nvidia.com/gpu.family=h100 --overwrite
+kubectl taint nodes <node-name> sku=h100:NoSchedule
 ```
 
-## 2) Shield: taint H100 nodes (bash)
-```bash
-NODE="h100-node-01"
-kubectl taint nodes "$NODE" hardware=h100:NoSchedule --overwrite
-```
-## 3) Magnet + Authorization (Kubernetes YAML)
+## 2. The Magnet (Tolerations & Affinity)
+Legitimate training workloads must contain a specific toleration to bypass the shield, AND a node affinity to be attracted to the H100s.
+
+Pod Spec Requirement:
+
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: h100-optimized-service
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: h100-optimized-service
-  template:
-    metadata:
-      labels:
-        app: h100-optimized-service
-    spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: nvidia.com/gpu.family
-                    operator: In
-                    values:
-                      - h100
-      tolerations:
-        - key: hardware
-          operator: Equal
-          value: h100
-          effect: NoSchedule
-      containers:
-        - name: ai-engine
-          image: internal-registry/llama3:latest
+tolerations:
+- key: "sku"
+  operator: "Equal"
+  value: "h100"
+  effect: "NoSchedule"
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: gpu-type
+          operator: In
+          values:
+          - nvidia-h100
 ```
+
+## 3. Migration Plan
+Phase 1 (Audit): Tag all current H100 workloads.
+
+Phase 2 (Soft Enforce): Warn owners of non-compliant pods.
+
+Phase 3 (Hard Enforce): Apply Taints. Non-compliant pods will remain Pending until moved to CPU nodes.
+
+[🏠 Return to Strategy Memo](index.md)

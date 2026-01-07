@@ -1,18 +1,22 @@
 # Infrastructure Strategy: H100 Fleet Optimization (H1 2026)
 
-To: Executive Leadership Team  
-Decision Needed: Approve enforcement of H100 scheduling governance + reporting cadence  
-Objective: Improve H100 ROI by reducing compute drift and increasing useful utilization
+[📂 **View Source Code on GitHub**](https://github.com/RajaRangiah/h100-strategy-memo)
+
+---
+
+**To:** Executive Leadership Team  
+**Decision Needed:** Approve enforcement of H100 scheduling governance + reporting cadence  
+**Objective:** Improve H100 ROI by reducing compute drift and increasing useful utilization
 
 ---
 
 ## 1) Economic Problem: Compute Drift
 
 H100 GPUs are Tier-1 capital assets. Today, we experience **Compute Drift**:
-- Non-GPU workloads occupy H100 nodes, wasting high-cost capacity
-- AI workloads run on A100 or CPU hardware, increasing latency and cost-per-inference
+- Non-GPU workloads occupy H100 nodes, wasting high-cost capacity.
+- AI workloads run on A100 or CPU hardware, increasing latency and cost-per-inference.
 
-Business impact: compute drift silently raises inference COGS, degrades performance, and delays breakeven on H100 capital expenditure.
+**Business impact:** Compute drift silently raises inference COGS, degrades performance, and delays breakeven on H100 capital expenditure.
 
 ---
 
@@ -25,27 +29,27 @@ Business impact: compute drift silently raises inference COGS, degrades performa
 | Effective $/useful GPU-hour | $__ | $__ |
 | Estimated monthly leakage | $__ | $__ |
 
-Model and assumptions: [Compute Unit Economics](economics.md)
+👉 **Deep Dive:** [Compute Unit Economics](economics.md)
 
 ---
 
 ## 3) Policy: “Shield & Magnet” Scheduling
 
 We will enforce a mandatory dual-layer scheduling policy:
-- **Shield**: Unauthorized workloads are blocked from H100 nodes (hard enforcement)
-- **Magnet**: Approved AI workloads are explicitly placed on H100 hardware
+- **Shield**: Unauthorized workloads are blocked from H100 nodes (hard enforcement).
+- **Magnet**: Approved AI workloads are explicitly placed on H100 hardware.
 
-Engineering specification: [Implementation](implementation.md)
+👉 **Deep Dive:** [Implementation Specs](implementation.md)
 
 ---
 
 ## 4) Infrastructure Governance
 
-- H100 nodes are classified as Tier-1 Capital Assets
-- Enforcement occurs at scheduling time (no best-effort placement)
-- Exceptions require Infra + FinOps approval, with scope and expiry
+- H100 nodes are classified as Tier-1 Capital Assets.
+- Enforcement occurs at scheduling time (no best-effort placement).
+- Exceptions require Infra + FinOps approval, with scope and expiry.
 
-Governance details: [Governance Model](governance.md)
+👉 **Deep Dive:** [Governance Model](governance.md)
 
 ---
 
@@ -57,12 +61,12 @@ Effectiveness will be tracked via:
 - Mis-routing of AI workloads
 - Effective $/useful GPU-hour
 
-Reporting cadence and KPIs: [Metrics](metrics.md)
+👉 **Deep Dive:** [Metrics & KPIs](metrics.md)
 
 ---
 
 ## 6) Decision Ask
 
 Approve:
-1. Mandatory enforcement of the H100 scheduling policy across clusters
-2. Monthly executive reporting on utilization, drift, and compute ROI
+1. Mandatory enforcement of the H100 scheduling policy across clusters.
+2. Monthly executive reporting on utilization, drift, and compute ROI.
